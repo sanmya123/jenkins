@@ -1,0 +1,49 @@
+{
+  "builders": [
+    {
+    "type":                    "vsphere-iso",
+    "disk_size":               "51200",
+    "communicator":            "ssh",
+    "floppy_files": [
+		"./rhel7.cfg"
+	     ],
+        "vm_name":                 "iaas-template-imf-x64-rhel7-20201005-2010",
+    "ssh_username":            "root",
+    "ssh_password":            "I like garlic onions.",
+    "ssh_timeout":             "20m",
+    "boot_command": ["<tab> text ks=hd:fd0:/rhel7.cfg<enter><wait>"],
+            "vcenter_server":        "ukdcl-ic-vcs01.test-lab.local",
+    "username":              "adm_akshaynamdev",
+    "password":              "Password1",
+    "insecure_connection":   "true",
+    "cluster":               "cls01",
+    "host":                  "cls01/ukdcl-ic-esxi02.test-lab.local",
+    "CPUs":                  "2",
+    "RAM":                   "4096",
+    "convert_to_template":   "true",
+    "RAM_reserve_all":       "true",
+    "CPU_limit":             -1,
+    "disk_thin_provisioned": "true",
+    "datastore":             "ESXi_IAC02",
+    "datacenter":            "iac-lab",
+    "network":               "Existing-LAB-Network|AP-EXISTING-LAB|SERVICES-124-LAB",
+    "disk_controller_type": "pvscsi",
+    "network_card":         "vmxnet3",
+    "ip_wait_timeout":      "40m",
+    "iso_paths": [
+              "[ESXi_IAC02] isos/Red Hat Enterprise Linux 7.7 Binary DVD.iso"
+           ],
+        "guest_os_type":         "rhel7_64Guest",
+    "folder":                "Manish/ImageFactory/linux"a
+        }],
+ "provisioners": [
+              {
+            "type":                "ansible",
+            "playbook_file":       "./linux/main.yml",
+            "extra_arguments": [
+            "--vault-password-file", "vault_pass",
+            "--extra-vars", "tags_list='install' vm_name=iaas-template-imf-x64-rhel7-20201005-2010 hypervisor_input=vsphere env_input=lab os_input=rhel version_input=7 working_directory_on_buildbox=/tmp/tower_image_build_1601884124"
+            ]
+       }
+          ]
+}
